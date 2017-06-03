@@ -55,21 +55,21 @@ NS_SWIFT_NAME(TransitionContext)
 
 /**
  The source view controller for this transition.
-
+ 
  This is the view controller that initiated the transition.
  */
 @property(nonatomic, strong, readonly, nullable) UIViewController *sourceViewController;
 
 /**
  The back view controller for this transition.
-
+ 
  This is the destination when the transition's direction is backward.
  */
 @property(nonatomic, strong, readonly, nonnull) UIViewController *backViewController;
 
 /**
  The fore view controller for this transition.
-
+ 
  This is the destination when the transition's direction is forward.
  */
 @property(nonatomic, strong, readonly, nonnull) UIViewController *foreViewController;
@@ -79,4 +79,12 @@ NS_SWIFT_NAME(TransitionContext)
  */
 @property(nonatomic, strong, readonly, nonnull) UIView *containerView;
 
+@end
+
+NS_SWIFT_NAME(InteractiveTransitionContext)
+@protocol MDMInteractiveTransitionContext
+- (void)updatePercent:(CGFloat)percent;
+- (void)finishInteractiveTransition;
+
+@property(nonatomic, readonly, nonnull) id<MDMTransitionContext> transitionContext;
 @end

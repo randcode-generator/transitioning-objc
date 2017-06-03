@@ -17,6 +17,7 @@
 #import "MDMPresentationTransitionController.h"
 
 #import "MDMTransition.h"
+#import "MDMViewControllerInteractiveTransitionContext.h"
 #import "MDMViewControllerTransitionContext.h"
 
 @interface MDMPresentationTransitionController () <UIViewControllerTransitioningDelegate, MDMViewControllerTransitionContextDelegate>
@@ -30,10 +31,12 @@
   UIPresentationController *_presentationController;
 
   MDMViewControllerTransitionContext *_context;
+  MDMViewControllerInteractiveTransitionContext *_interactiveContext;
   __weak UIViewController *_source;
 }
 
 @synthesize transition = _transition;
+@synthesize interactiveTransition = _interactiveTransition;
 
 - (nonnull instancetype)initWithViewController:(nonnull UIViewController *)viewController {
   self = [super init];
@@ -54,6 +57,10 @@
     UIModalPresentationStyle style = [withPresentation defaultModalPresentationStyle];
     _associatedViewController.modalPresentationStyle = style;
   }
+}
+
+- (void)setInteractiveTransition:(id<MDMInteractiveTransition>)transition {
+  _interactiveTransition = transition;
 }
 
 #pragma mark - UIViewControllerTransitioningDelegate
@@ -78,6 +85,27 @@
                                   foreViewController:dismissed
                                            direction:MDMTransitionDirectionBackward];
   return _context;
+}
+
+- (nullable id<UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id<UIViewControllerAnimatedTransitioning>)animator {
+  if (_interactiveTransition) {
+    if ([_interactiveTransition respondsToSelector:@selector(startWithInteractiveContext:)]) {
+      _interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context];
+      [_interactiveTransition startWithInteractiveContext:_interactiveContext];
+    }
+  }
+
+  return _interactiveTransition == nil ? nil : [_interactiveContext getPercentIT];
+}
+
+- (nullable id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
+  if (_interactiveTransition) {
+    if ([_interactiveTransition respondsToSelector:@selector(startWithInteractiveContext:)]) {
+      _interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context];
+      [_interactiveTransition startWithInteractiveContext:_interactiveContext];
+    }
+  }
+  return _interactiveTransition == nil ? nil : [_interactiveContext getPercentIT];
 }
 
 // Presentation
