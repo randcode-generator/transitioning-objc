@@ -19,7 +19,7 @@ import UIKit
 import Transitioning
 
 class ModalInteractiveViewController: ExampleViewController {
-
+  var shouldShowText = true
   var context: InteractiveTransitionContext! = nil
   func setcontext(context: InteractiveTransitionContext) {
     self.context = context
@@ -37,10 +37,12 @@ class ModalInteractiveViewController: ExampleViewController {
     button.addTarget(self, action: #selector(didTap), for: .touchUpInside)
     view.addSubview(button)
 
-    let label = UILabel(frame: CGRect(x: 30, y: 160, width: 300, height: 50))
-    label.textColor = UIColor.white
-    label.text = "Swipe down after pressing close"
-    view.addSubview(label)
+    if (shouldShowText) {
+      let label = UILabel(frame: CGRect(x: 30, y: 160, width: 300, height: 50))
+      label.textColor = UIColor.white
+      label.text = "Swipe down after pressing close"
+      view.addSubview(label)
+    }
   }
 
   override var preferredStatusBarStyle: UIStatusBarStyle {

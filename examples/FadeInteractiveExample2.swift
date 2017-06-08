@@ -20,7 +20,7 @@ import Transitioning
 // This example demonstrates the minimal path to building a custom transition using the Material
 // Motion Transitioning APIs in Swift. The essential steps have been documented below.
 
-class FadeInteractiveExampleViewController: ExampleViewController {
+class FadeInteractiveExampleViewController2: ExampleViewController {
 
   var context: InteractiveTransitionContext! = nil
   func setcontext(context: InteractiveTransitionContext) {
@@ -37,14 +37,15 @@ class FadeInteractiveExampleViewController: ExampleViewController {
   func didTap() {
     let modalViewController = ModalInteractiveViewController()
 
+    modalViewController.shouldShowText = false
     // The transition controller is an associated object on all UIViewController instances that
     // allows you to customize the way the view controller is presented. The primary API on the
     // controller that you'll make use of is the `transition` property. Setting this property will
     // dictate how the view controller is presented. For this example we've built a custom
     // FadeTransition, so we'll make use of that now:
-    modalViewController.transitionController.transition = FadeTransitionWithInteraction()
+    modalViewController.transitionController.transition = FadeTransitionWithInteraction2()
     modalViewController.transitionController.interactiveTransition =
-        FadeInteractionTransition()
+        FadeInteractionTransition2()
 
     // Note that once we assign the transition object to the view controller, the transition will
     // govern all subsequent presentations and dismissals of that view controller instance. If we
@@ -98,7 +99,7 @@ class FadeInteractiveExampleViewController: ExampleViewController {
 }
 
 // Transitions must be NSObject types that conform to the Transition protocol.
-private final class FadeTransitionWithInteraction: NSObject, Transition {
+private final class FadeTransitionWithInteraction2: NSObject, Transition {
 
   // The sole method we're expected to implement, start is invoked each time the view controller is
   // presented or dismissed.
@@ -135,9 +136,13 @@ private final class FadeTransitionWithInteraction: NSObject, Transition {
   }
 }
 
-private final class FadeInteractionTransition: NSObject, InteractiveTransition {
+private final class FadeInteractionTransition2: NSObject, InteractiveTransition {
   func isInteractive(_ context: TransitionContext) -> Bool {
-    return true
+    if(context.direction == .forward) {
+      return true
+    } else {
+      return false
+    }
   }
   
   func start(withInteractiveContext context: InteractiveTransitionContext) {
@@ -146,7 +151,7 @@ private final class FadeInteractionTransition: NSObject, InteractiveTransition {
       let m = context.transitionContext.foreViewController as! ModalInteractiveViewController
       m.setcontext(context: context)
     } else {
-      let n = context.transitionContext.sourceViewController as! FadeInteractiveExampleViewController
+      let n = context.transitionContext.sourceViewController as! FadeInteractiveExampleViewController2
       n.setcontext(context: context)
       n.initDraggable()
     }

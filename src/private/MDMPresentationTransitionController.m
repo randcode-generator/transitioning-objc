@@ -88,24 +88,11 @@
 }
 
 - (nullable id<UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id<UIViewControllerAnimatedTransitioning>)animator {
-  if (_interactiveTransition) {
-    if ([_interactiveTransition respondsToSelector:@selector(startWithInteractiveContext:)]) {
-      _interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context];
-      [_interactiveTransition startWithInteractiveContext:_interactiveContext];
-    }
-  }
-
-  return _interactiveTransition == nil ? nil : [_interactiveContext getPercentIT];
+  return [self prepareForInteractiveTransition];
 }
 
 - (nullable id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
-  if (_interactiveTransition) {
-    if ([_interactiveTransition respondsToSelector:@selector(startWithInteractiveContext:)]) {
-      _interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context];
-      [_interactiveTransition startWithInteractiveContext:_interactiveContext];
-    }
-  }
-  return _interactiveTransition == nil ? nil : [_interactiveContext getPercentIT];
+  return [self prepareForInteractiveTransition];
 }
 
 // Presentation
@@ -153,4 +140,35 @@
   }
 }
 
+- (nullable id<UIViewControllerInteractiveTransitioning>) prepareForInteractiveTransition {
+  Boolean isInteractive = false;
+  
+  if (_interactiveTransition) {
+    Boolean isInteractiveResponds = false;
+    Boolean startWithInteractiveResponds = false;
+    
+    if ([_interactiveTransition respondsToSelector:@selector(isInteractive:)]) {
+      isInteractiveResponds = true;
+    } else {
+      return nil;
+    }
+    
+    if ([_interactiveTransition respondsToSelector:@selector(startWithInteractiveContext:)]) {
+      startWithInteractiveResponds = true;
+    } else {
+      return nil;
+    }
+    
+    if(isInteractiveResponds && startWithInteractiveResponds) {
+      isInteractive = [_interactiveTransition isInteractive:_context];
+      if(isInteractive) {
+        _interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context];
+        
+        [_interactiveTransition startWithInteractiveContext:_interactiveContext];
+      }
+    }
+  }
+  
+  return isInteractive == false ? nil : [_interactiveContext getPercentIT];
+}
 @end

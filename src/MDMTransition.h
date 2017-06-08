@@ -92,5 +92,6 @@ NS_SWIFT_NAME(presentationController(forPresented:presenting:source:));
 
 NS_SWIFT_NAME(InteractiveTransition)
 @protocol MDMInteractiveTransition <NSObject>
+- (Boolean)isInteractive:(nonnull id<MDMTransitionContext>)context;
 - (void)startWithInteractiveContext:(nonnull id<MDMInteractiveTransitionContext>)context;
 @end

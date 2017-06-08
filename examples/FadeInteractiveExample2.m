@@ -14,7 +14,7 @@
  limitations under the License.
  */
 
-#import "FadeInteractiveExample.h"
+#import "FadeInteractiveExample2.h"
 
 #import "TransitionsCatalog-Swift.h"
 
@@ -22,13 +22,13 @@
 // Motion Transitioning APIs in Objective-C. Please see the companion Swift implementation for
 // detailed comments.
 
-@interface FadeTransitionWithInteraction : NSObject <MDMTransition>
+@interface FadeTransitionWithInteraction2 : NSObject <MDMTransition>
 @end
 
-@interface FadeInteractiveTransition : NSObject <MDMInteractiveTransition>
+@interface FadeInteractiveTransition2 : NSObject <MDMInteractiveTransition>
 @end
 
-@implementation FadeInteractiveExampleObjcViewController {
+@implementation FadeInteractiveExampleObjcViewController2 {
   id<MDMInteractiveTransitionContext> transitionContext;
   CGFloat percentage;
   CGFloat prevY;
@@ -67,9 +67,10 @@
 - (void)didTap {
   ModalInteractiveViewController *viewController = [[ModalInteractiveViewController alloc] init];
 
-  viewController.mdm_transitionController.transition = [[FadeTransitionWithInteraction alloc] init];
+  viewController.shouldShowText = false;
+  viewController.mdm_transitionController.transition = [[FadeTransitionWithInteraction2 alloc] init];
 
-  viewController.mdm_transitionController.interactiveTransition = [[FadeInteractiveTransition alloc] init];
+  viewController.mdm_transitionController.interactiveTransition = [[FadeInteractiveTransition2 alloc] init];
 
   [self presentViewController:viewController animated:true completion:nil];
 }
@@ -92,12 +93,12 @@
 }
 
 + (NSArray<NSString *> *)catalogBreadcrumbs {
-  return @[ @"1(i). Fade transition (objc) (2 way)" ];
+  return @[ @"2(i). Fade transition (objc) (1 way)" ];
 }
 
 @end
 
-@implementation FadeTransitionWithInteraction
+@implementation FadeTransitionWithInteraction2
 
 - (NSTimeInterval)transitionDurationWithContext:(nonnull id<MDMTransitionContext>)context {
   return 0.3;
@@ -129,9 +130,14 @@
 }
 @end
 
-@implementation FadeInteractiveTransition
+@implementation FadeInteractiveTransition2
+
 - (Boolean)isInteractive:(id<MDMTransitionContext>)context {
+  if(context.direction == MDMTransitionDirectionForward) {
     return true;
+  } else {
+    return false;
+  }
 }
 
 - (void)startWithInteractiveContext:(nonnull id<MDMInteractiveTransitionContext>)context {
@@ -139,7 +145,7 @@
     ModalInteractiveViewController *m = (ModalInteractiveViewController *)context.transitionContext.foreViewController;
     [m setcontextWithContext:context];
   } else {
-    FadeInteractiveExampleObjcViewController *f = (FadeInteractiveExampleObjcViewController *)context.transitionContext.sourceViewController;
+    FadeInteractiveExampleObjcViewController2 *f = (FadeInteractiveExampleObjcViewController2 *)context.transitionContext.sourceViewController;
     [f setcontext:context];
     [f initDraggable];
   }
