@@ -22,12 +22,6 @@
 // Motion Transitioning APIs in Objective-C. Please see the companion Swift implementation for
 // detailed comments.
 
-@interface FadeTransitionWithInteraction2 : NSObject <MDMTransition>
-@end
-
-@interface FadeInteractiveTransition2 : NSObject <MDMInteractiveTransition>
-@end
-
 @implementation FadeInteractiveExampleObjcViewController2 {
   id<MDMInteractiveTransitionContext> transitionContext;
   CGFloat percentage;
@@ -40,7 +34,7 @@
   prevY = 0;
 }
 
-- (void)setcontext:(nonnull id<MDMInteractiveTransitionContext>)context {
+- (void)setInteractiveWithContext:(id <MDMInteractiveTransitionContext> _Nonnull)context {
   transitionContext = context;
 }
 
@@ -68,9 +62,11 @@
   ModalInteractiveViewController *viewController = [[ModalInteractiveViewController alloc] init];
 
   viewController.shouldShowText = false;
-  viewController.mdm_transitionController.transition = [[FadeTransitionWithInteraction2 alloc] init];
+  viewController.mdm_transitionController.transition = [[FadeTransition alloc] init];
 
-  viewController.mdm_transitionController.interactiveTransition = [[FadeInteractiveTransition2 alloc] init];
+  FadeInteractiveTransition *f = [[FadeInteractiveTransition alloc] init];
+  f.isTwoWay = false;
+  viewController.mdm_transitionController.interactiveTransition = f;
 
   [self presentViewController:viewController animated:true completion:nil];
 }
@@ -96,58 +92,4 @@
   return @[ @"2(i). Fade transition (objc) (1 way)" ];
 }
 
-@end
-
-@implementation FadeTransitionWithInteraction2
-
-- (NSTimeInterval)transitionDurationWithContext:(nonnull id<MDMTransitionContext>)context {
-  return 0.3;
-}
-
-- (void)startWithContext:(id<MDMTransitionContext>)context {
-  [CATransaction begin];
-  [CATransaction setCompletionBlock:^{
-    [context transitionDidEnd];
-  }];
-
-  CABasicAnimation *fade = [CABasicAnimation animationWithKeyPath:@"opacity"];
-
-  fade.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-
-  fade.fromValue = @0;
-  fade.toValue = @1;
-
-  if (context.direction == MDMTransitionDirectionBackward) {
-    id swap = fade.fromValue;
-    fade.fromValue = fade.toValue;
-    fade.toValue = swap;
-  }
-
-  [context.foreViewController.view.layer addAnimation:fade forKey:fade.keyPath];
-  [context.foreViewController.view.layer setValue:fade.toValue forKey:fade.keyPath];
-
-  [CATransaction commit];
-}
-@end
-
-@implementation FadeInteractiveTransition2
-
-- (Boolean)isInteractive:(id<MDMTransitionContext>)context {
-  if(context.direction == MDMTransitionDirectionForward) {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-- (void)startWithInteractiveContext:(nonnull id<MDMInteractiveTransitionContext>)context {
-  if (context.transitionContext.direction == MDMTransitionDirectionForward) {
-    ModalInteractiveViewController *m = (ModalInteractiveViewController *)context.transitionContext.foreViewController;
-    [m setcontextWithContext:context];
-  } else {
-    FadeInteractiveExampleObjcViewController2 *f = (FadeInteractiveExampleObjcViewController2 *)context.transitionContext.sourceViewController;
-    [f setcontext:context];
-    [f initDraggable];
-  }
-}
 @end

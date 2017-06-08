@@ -20,10 +20,10 @@ import Transitioning
 // This example demonstrates the minimal path to building a custom transition using the Material
 // Motion Transitioning APIs in Swift. The essential steps have been documented below.
 
-class FadeInteractiveExampleViewController: ExampleViewController {
+class FadeInteractiveExampleViewController: ExampleViewController, FadeInteractiveCommon {
 
   var context: InteractiveTransitionContext! = nil
-  func setcontext(context: InteractiveTransitionContext) {
+  func setInteractive(context: InteractiveTransitionContext) {
     self.context = context
   }
 
@@ -42,9 +42,9 @@ class FadeInteractiveExampleViewController: ExampleViewController {
     // controller that you'll make use of is the `transition` property. Setting this property will
     // dictate how the view controller is presented. For this example we've built a custom
     // FadeTransition, so we'll make use of that now:
-    modalViewController.transitionController.transition = FadeTransitionWithInteraction()
+    modalViewController.transitionController.transition = FadeTransition()
     modalViewController.transitionController.interactiveTransition =
-        FadeInteractionTransition()
+        FadeInteractiveTransition()
 
     // Note that once we assign the transition object to the view controller, the transition will
     // govern all subsequent presentations and dismissals of that view controller instance. If we
@@ -94,61 +94,5 @@ class FadeInteractiveExampleViewController: ExampleViewController {
   override func exampleInformation() -> ExampleInfo {
     return .init(title: type(of: self).catalogBreadcrumbs().last!,
                  instructions: "Tap to present a modal transition.")
-  }
-}
-
-// Transitions must be NSObject types that conform to the Transition protocol.
-private final class FadeTransitionWithInteraction: NSObject, Transition {
-
-  // The sole method we're expected to implement, start is invoked each time the view controller is
-  // presented or dismissed.
-  func start(with context: TransitionContext) {
-    CATransaction.begin()
-
-    CATransaction.setCompletionBlock {
-      // Let UIKit know that the transition has come to an end.
-      context.transitionDidEnd()
-    }
-
-    let fade = CABasicAnimation(keyPath: "opacity")
-
-    fade.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-
-    // Define our animation assuming that we're going forward (presenting)...
-    fade.fromValue = 0
-    fade.toValue = 1
-
-    // ...and reverse it if we're going backwards (dismissing).
-    if context.direction == .backward {
-      let swap = fade.fromValue
-      fade.fromValue = fade.toValue
-      fade.toValue = swap
-    }
-
-    // Add the animation...
-    context.foreViewController.view.layer.add(fade, forKey: fade.keyPath)
-
-    // ...and ensure that our model layer reflects the final value.
-    context.foreViewController.view.layer.setValue(fade.toValue, forKeyPath: fade.keyPath!)
-
-    CATransaction.commit()
-  }
-}
-
-private final class FadeInteractionTransition: NSObject, InteractiveTransition {
-  func isInteractive(_ context: TransitionContext) -> Bool {
-    return true
-  }
-  
-  func start(withInteractiveContext context: InteractiveTransitionContext) {
-
-    if (context.transitionContext.direction == .forward) {
-      let m = context.transitionContext.foreViewController as! ModalInteractiveViewController
-      m.setcontext(context: context)
-    } else {
-      let n = context.transitionContext.sourceViewController as! FadeInteractiveExampleViewController
-      n.setcontext(context: context)
-      n.initDraggable()
-    }
   }
 }

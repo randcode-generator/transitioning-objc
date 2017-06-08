@@ -22,9 +22,6 @@
 // Motion Transitioning APIs in Objective-C. Please see the companion Swift implementation for
 // detailed comments.
 
-@interface FadeTransition : NSObject <MDMTransition>
-@end
-
 @implementation FadeExampleObjcViewController
 
 - (void)didTap {
@@ -54,39 +51,6 @@
 
 + (NSArray<NSString *> *)catalogBreadcrumbs {
   return @[ @"1. Fade transition (objc)" ];
-}
-
-@end
-
-@implementation FadeTransition
-
-- (NSTimeInterval)transitionDurationWithContext:(nonnull id<MDMTransitionContext>)context {
-  return 0.3;
-}
-
-- (void)startWithContext:(id<MDMTransitionContext>)context {
-  [CATransaction begin];
-  [CATransaction setCompletionBlock:^{
-    [context transitionDidEnd];
-  }];
-
-  CABasicAnimation *fade = [CABasicAnimation animationWithKeyPath:@"opacity"];
-
-  fade.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-
-  fade.fromValue = @0;
-  fade.toValue = @1;
-
-  if (context.direction == MDMTransitionDirectionBackward) {
-    id swap = fade.fromValue;
-    fade.fromValue = fade.toValue;
-    fade.toValue = swap;
-  }
-
-  [context.foreViewController.view.layer addAnimation:fade forKey:fade.keyPath];
-  [context.foreViewController.view.layer setValue:fade.toValue forKey:fade.keyPath];
-
-  [CATransaction commit];
 }
 
 @end
