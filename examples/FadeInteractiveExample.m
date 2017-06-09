@@ -16,47 +16,11 @@
 
 #import "FadeInteractiveExample.h"
 
-#import "TransitionsCatalog-Swift.h"
-
 // This example demonstrates the minimal path to building a custom transition using the Material
 // Motion Transitioning APIs in Objective-C. Please see the companion Swift implementation for
 // detailed comments.
 
-@implementation FadeInteractiveExampleObjcViewController {
-  id<MDMInteractiveTransitionContext> transitionContext;
-  CGFloat percentage;
-  CGFloat prevY;
-}
-
-- (void)initDraggable {
-  [self.view addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)]];
-  percentage = 0.01;
-  prevY = 0;
-}
-
-- (void)setInteractiveWithContext:(id <MDMInteractiveTransitionContext> _Nonnull)context {
-  transitionContext = context;
-}
-
-- (void)didPan:(UIPanGestureRecognizer *)gestureRecognizer {
-  CGPoint translation = [gestureRecognizer locationInView:gestureRecognizer.view];
-
-  if (prevY > translation.y) {
-    percentage -= 0.05;
-  } else {
-    percentage += 0.05;
-  }
-
-  if (percentage < 0) {
-    percentage = 0;
-  }
-
-  prevY = translation.y;
-  [transitionContext updatePercent:percentage];
-  if (percentage > 1.0) {
-    [transitionContext finishInteractiveTransition];
-  }
-}
+@implementation FadeInteractiveExampleObjcViewController
 
 - (void)didTap {
   ModalInteractiveViewController *viewController = [[ModalInteractiveViewController alloc] init];

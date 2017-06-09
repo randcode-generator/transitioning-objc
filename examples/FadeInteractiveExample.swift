@@ -20,20 +20,7 @@ import Transitioning
 // This example demonstrates the minimal path to building a custom transition using the Material
 // Motion Transitioning APIs in Swift. The essential steps have been documented below.
 
-class FadeInteractiveExampleViewController: ExampleViewController, FadeInteractiveCommon {
-
-  var context: InteractiveTransitionContext! = nil
-  func setInteractive(context: InteractiveTransitionContext) {
-    self.context = context
-  }
-
-  func initDraggable() {
-    view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(didPan)))
-
-    percentage = CGFloat(0.01)
-    prevY = 0
-  }
-
+class FadeInteractiveExampleViewController: ExampleViewController {
   func didTap() {
     let modalViewController = ModalInteractiveViewController()
 
@@ -67,28 +54,6 @@ class FadeInteractiveExampleViewController: ExampleViewController, FadeInteracti
     label.textColor = UIColor.white
     label.text = "Swipe up after pressing start"
     view.addSubview(label)
-  }
-
-  var prevY: CGFloat = 0
-  var percentage = CGFloat(0.01)
-  func didPan(_ gestureRecognizer : UIPanGestureRecognizer) {
-    let translation = gestureRecognizer.location(in: gestureRecognizer.view)
-
-    if prevY > translation.y {
-      percentage -= 0.2
-    } else {
-      percentage += 0.2
-    }
-
-    if(percentage < 0) {
-      percentage = 0
-    }
-
-    prevY = translation.y
-    context.updatePercent(percentage)
-    if percentage > 1.0 {
-      context.finishInteractiveTransition()
-    }
   }
 
   override func exampleInformation() -> ExampleInfo {

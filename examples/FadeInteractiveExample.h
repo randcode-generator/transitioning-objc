@@ -17,5 +17,5 @@
 #import <UIKit/UIKit.h>
 #import "TransitionsCatalog-Swift.h"
 
-@interface FadeInteractiveExampleObjcViewController : UIViewController <FadeInteractiveCommon>
+@interface FadeInteractiveExampleObjcViewController : UIViewController
 @end

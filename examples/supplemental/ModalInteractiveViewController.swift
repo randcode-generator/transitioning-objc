@@ -20,17 +20,11 @@ import Transitioning
 
 class ModalInteractiveViewController: ExampleViewController {
   var shouldShowText = true
-  var context: InteractiveTransitionContext! = nil
-  func setcontext(context: InteractiveTransitionContext) {
-    self.context = context
-  }
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
     view.backgroundColor = .primaryColor
-
-    view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(ModalInteractiveViewController.didPan(_:))))
     let button = UIButton(frame: CGRect(x: 30, y: 100, width: 200, height: 50))
     button.backgroundColor = UIColor.green
     button.setTitle("Close", for: .normal)
@@ -51,23 +45,5 @@ class ModalInteractiveViewController: ExampleViewController {
 
   func didTap() {
     dismiss(animated: true)
-  }
-
-  var prevY: CGFloat = 0
-  var percentage = CGFloat(0.01)
-  func didPan(_ gestureRecognizer : UIPanGestureRecognizer) {
-    let translation = gestureRecognizer.location(in: gestureRecognizer.view)
-
-    if prevY > translation.y {
-      percentage += 0.2
-    } else {
-      percentage -= 0.2
-    }
-    prevY = translation.y
-    context.updatePercent(percentage)
-    if percentage > 1.0 {
-      context.finishInteractiveTransition()
-      percentage = CGFloat(0.01)
-    }
   }
 }
