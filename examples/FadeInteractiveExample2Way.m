@@ -14,22 +14,20 @@
  limitations under the License.
  */
 
-#import "FadeInteractiveExample2.h"
+#import "FadeInteractiveExample2Way.h"
 
 // This example demonstrates the minimal path to building a custom transition using the Material
 // Motion Transitioning APIs in Objective-C. Please see the companion Swift implementation for
 // detailed comments.
 
-@implementation FadeInteractiveExampleObjcViewController2
+@implementation FadeInteractiveExampleObjc2WayViewController
+
 - (void)didTap {
   ModalInteractiveViewController *viewController = [[ModalInteractiveViewController alloc] init];
 
-  viewController.shouldShowText = false;
   viewController.mdm_transitionController.transition = [[FadeTransition alloc] init];
 
-  FadeInteractiveTransition *f = [[FadeInteractiveTransition alloc] init];
-  f.isTwoWay = false;
-  viewController.mdm_transitionController.interactiveTransition = f;
+  viewController.mdm_transitionController.interactiveTransition = [[FadeInteractiveTransition alloc] init];
 
   [self presentViewController:viewController animated:true completion:nil];
 }
@@ -52,7 +50,7 @@
 }
 
 + (NSArray<NSString *> *)catalogBreadcrumbs {
-  return @[ @"2(i). Fade transition (objc) (1 way)" ];
+  return @[ @"1(i). Fade transition (objc) (2 way)" ];
 }
 
 @end

@@ -24,7 +24,7 @@ extension FadeInteractiveExampleViewController {
   class func catalogBreadcrumbs() -> [String] { return ["1(i). Fade transition (2 way)"] }
 }
 
-extension FadeInteractiveExampleViewController2 {
+extension FadeInteractiveExample1WayViewController {
   class func catalogBreadcrumbs() -> [String] { return ["2(i). Fade transition (1 way)"] }
 }
 

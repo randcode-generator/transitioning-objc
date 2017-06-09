@@ -20,7 +20,7 @@ import Transitioning
 // This example demonstrates the minimal path to building a custom transition using the Material
 // Motion Transitioning APIs in Swift. The essential steps have been documented below.
 
-class FadeInteractiveExampleViewController2: ExampleViewController {
+class FadeInteractiveExample1WayViewController: ExampleViewController {
   func didTap() {
     let modalViewController = ModalInteractiveViewController()
 
