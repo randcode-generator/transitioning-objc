@@ -145,7 +145,6 @@
   
   if (_interactiveTransition) {
     Boolean isInteractiveResponds = false;
-    Boolean startWithInteractiveResponds = false;
     
     if ([_interactiveTransition respondsToSelector:@selector(isInteractive:)]) {
       isInteractiveResponds = true;
@@ -153,18 +152,10 @@
       return nil;
     }
     
-    if ([_interactiveTransition respondsToSelector:@selector(startWithInteractiveContext:)]) {
-      startWithInteractiveResponds = true;
-    } else {
-      return nil;
-    }
-    
-    if(isInteractiveResponds && startWithInteractiveResponds) {
+    if(isInteractiveResponds) {
       isInteractive = [_interactiveTransition isInteractive:_context];
       if(isInteractive) {
-        _interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context];
-        
-        [_interactiveTransition startWithInteractiveContext:_interactiveContext];
+        _interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context it:_interactiveTransition];
       }
     }
   }

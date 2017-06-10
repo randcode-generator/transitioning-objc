@@ -20,6 +20,6 @@
 #import "MDMViewControllerTransitionContext.h"
 
 @interface MDMViewControllerInteractiveTransitionContext : NSObject <MDMInteractiveTransitionContext>
-- (nonnull instancetype)initWithTransition:(nonnull id<MDMTransitionContext>)transitionContext;
+- (nonnull instancetype)initWithTransition:(nonnull id<MDMTransitionContext>)transitionContext it:(nonnull id<MDMInteractiveTransition>) IT;
 - (UIPercentDrivenInteractiveTransition* _Nonnull)getPercentIT;
 @end

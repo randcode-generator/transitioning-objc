@@ -15,17 +15,39 @@
  */
 
 #import "MDMViewControllerInteractiveTransitionContext.h"
+@interface percentdriven:UIPercentDrivenInteractiveTransition {
+  id<MDMInteractiveTransition> IT;
+  id<MDMInteractiveTransitionContext> context;
+}
+@end
+
+@implementation percentdriven
+- (nonnull instancetype)initWithContext:(nonnull id<MDMInteractiveTransition>)ITA c:(nonnull id<MDMInteractiveTransitionContext>)contextA{
+  self = [super init];
+  if (self) {
+    IT = ITA;
+    context = contextA;
+  }
+  return self;
+}
+
+- (void)startInteractiveTransition:(id <UIViewControllerContextTransitioning>)contextA {
+  [super startInteractiveTransition:contextA];
+  
+  [IT startWithInteractiveContext: context];
+}
+@end
 
 @implementation MDMViewControllerInteractiveTransitionContext {
-  UIPercentDrivenInteractiveTransition *_percent;
+  percentdriven *_percent;
 }
 
 @synthesize transitionContext = _transitionContext;
 
-- (nonnull instancetype)initWithTransition:(nonnull id<MDMTransitionContext>)transitionContext {
+- (nonnull instancetype)initWithTransition:(nonnull id<MDMTransitionContext>)transitionContext it:(nonnull id<MDMInteractiveTransition>) IT {
   self = [super init];
   if (self) {
-    _percent = [[UIPercentDrivenInteractiveTransition alloc] init];
+    _percent = [[percentdriven alloc] initWithContext: IT c:self];
     _transitionContext = transitionContext;
   }
   return self;
