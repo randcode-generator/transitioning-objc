@@ -78,11 +78,18 @@
 }
 
 - (void)transitionDidEnd {
-  [_transitionContext completeTransition:true];
-
+  BOOL wasCanceled = [_transitionContext transitionWasCancelled];
+  if(wasCanceled) {
+    [_transitionContext completeTransition: false];
+  } else {
+    [_transitionContext completeTransition: true];
+  }
+  
   _transition = nil;
 
-  [_delegate transitionDidCompleteWithContext:self];
+  if(!wasCanceled) {
+    [_delegate transitionDidCompleteWithContext:self];
+  }
 }
 
 #pragma mark - Private

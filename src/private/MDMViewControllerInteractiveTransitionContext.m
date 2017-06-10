@@ -43,4 +43,7 @@
   [_percent finishInteractiveTransition];
 }
 
+- (void)cancelInteractiveTransition {
+  [_percent cancelInteractiveTransition];
+}
 @end

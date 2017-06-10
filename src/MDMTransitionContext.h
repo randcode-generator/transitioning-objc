@@ -85,6 +85,7 @@ NS_SWIFT_NAME(InteractiveTransitionContext)
 @protocol MDMInteractiveTransitionContext
 - (void)updatePercent:(CGFloat)percent;
 - (void)finishInteractiveTransition;
+- (void)cancelInteractiveTransition;
 
 @property(nonatomic, readonly, nonnull) id<MDMTransitionContext> transitionContext;
 @end
