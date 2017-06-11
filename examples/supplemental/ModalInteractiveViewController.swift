@@ -25,12 +25,9 @@ class ModalInteractiveViewController: ExampleViewController {
     super.viewDidLoad()
 
     view.backgroundColor = .primaryColor
-    let button = UIButton(frame: CGRect(x: 30, y: 100, width: 200, height: 50))
-    button.backgroundColor = UIColor.green
-    button.setTitle("Close", for: .normal)
-    button.addTarget(self, action: #selector(didTap), for: .touchUpInside)
-    view.addSubview(button)
-
+    
+    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))
+    
     if (shouldShowText) {
       let label = UILabel(frame: CGRect(x: 30, y: 160, width: 300, height: 50))
       label.textColor = UIColor.white

@@ -26,9 +26,9 @@ final class FadeInteractiveTransition: NSObject, InteractiveTransition {
       return true
     } else {
       if(context.direction == .forward) {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     }
   }
@@ -40,8 +40,8 @@ final class FadeInteractiveTransition: NSObject, InteractiveTransition {
       let m = context.transitionContext.foreViewController as! ModalInteractiveViewController
       m.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(didPan)))
     } else {
-      let n = context.transitionContext.sourceViewController
-      n!.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(didPan)))
+      let n = context.transitionContext.backViewController
+      n.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(didPan)))
       prevY = 0
       percentage = CGFloat(0.01)
     }
@@ -54,21 +54,29 @@ final class FadeInteractiveTransition: NSObject, InteractiveTransition {
     
     if(context.transitionContext.direction == .forward) {
       if prevY > translation.y {
-        percentage += 0.2
+        percentage += 0.05
       } else {
-        percentage -= 0.2
+        percentage -= 0.05
       }
     } else {
       if prevY > translation.y {
-        percentage -= 0.2
+        percentage -= 0.05
       } else {
-        percentage += 0.2
+        percentage += 0.05
       }
     }
-    prevY = translation.y
-    context.updatePercent(percentage)
-    if percentage > 1.0 {
-      context.finishInteractiveTransition()
+    
+    if(gestureRecognizer.state == .began) {
+      context.transitionContext.foreViewController.dismiss(animated: true, completion: nil)
+    } else if(gestureRecognizer.state == .changed) {
+      prevY = translation.y
+      context.updatePercent(percentage)
+    } else if(gestureRecognizer.state == .ended) {
+      if percentage > 0.5 {
+        context.finishInteractiveTransition()
+      } else {
+        context.cancelInteractiveTransition()
+      }
       percentage = CGFloat(0.01)
     }
   }
