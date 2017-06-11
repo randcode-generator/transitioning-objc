@@ -46,12 +46,22 @@ class ModalInteractiveViewController: ExampleViewController {
   func didPan(_ gestureRecognizer : UIPanGestureRecognizer) {
     let translation = gestureRecognizer.location(in: gestureRecognizer.view)
     
-    if prevY > translation.y {
-      percentage += 0.02
-      percentage = min(percentage, 1)
+    if(interactiveTransitionContext!.transitionContext.direction == .forward) {
+      if prevY > translation.y {
+        percentage += 0.02
+        percentage = min(percentage, 1)
+      } else {
+        percentage -= 0.02
+        percentage = max(percentage, 0)
+      }
     } else {
-      percentage -= 0.02
-      percentage = max(percentage, 0)
+      if prevY < translation.y {
+        percentage += 0.02
+        percentage = min(percentage, 1)
+      } else {
+        percentage -= 0.02
+        percentage = max(percentage, 0)
+      }
     }
     
     prevY = translation.y
