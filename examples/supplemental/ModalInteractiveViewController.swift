@@ -25,11 +25,6 @@ class ModalInteractiveViewController: ExampleViewController {
     super.viewDidLoad()
 
     view.backgroundColor = .primaryColor
-    let button = UIButton(frame: CGRect(x: 30, y: 100, width: 200, height: 50))
-    button.backgroundColor = UIColor.green
-    button.setTitle("Close", for: .normal)
-    button.addTarget(self, action: #selector(didTap), for: .touchUpInside)
-    view.addSubview(button)
 
     if (shouldShowText) {
       let label = UILabel(frame: CGRect(x: 30, y: 160, width: 300, height: 50))
@@ -37,13 +32,46 @@ class ModalInteractiveViewController: ExampleViewController {
       label.text = "Swipe down after pressing close"
       view.addSubview(label)
     }
+    
+    view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(didPan)))
   }
 
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
   }
-
-  func didTap() {
-    dismiss(animated: true)
+  
+  var isCompleted: Bool = false
+  var prevY: CGFloat = 0
+  var percentage = CGFloat(0.01)
+  func didPan(_ gestureRecognizer : UIPanGestureRecognizer) {
+    let translation = gestureRecognizer.location(in: gestureRecognizer.view)
+    
+    if prevY > translation.y {
+      percentage += 0.02
+      percentage = min(percentage, 1)
+    } else {
+      percentage -= 0.02
+      percentage = max(percentage, 0)
+    }
+    
+    prevY = translation.y
+    if(gestureRecognizer.state == .began) {
+      if(isCompleted) {
+        dismiss(animated: true, completion: nil)
+      }
+    } else if(gestureRecognizer.state == .changed) {
+      prevY = translation.y
+      interactiveTransitionContext!.updatePercent(percentage)
+    } else if(gestureRecognizer.state == .ended) {
+      if percentage > 0.5 {
+        interactiveTransitionContext!.finishInteractiveTransition()
+        NSLog("finish")
+      } else {
+        interactiveTransitionContext!.cancelInteractiveTransition()
+        NSLog("cancel")
+      }
+      isCompleted = true
+      percentage = CGFloat(0.01)
+    }
   }
 }

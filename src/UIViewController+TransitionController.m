@@ -24,6 +24,14 @@
 
 #pragma mark - Public
 
+- (id<MDMInteractiveTransition>)interactiveTransitionContext {
+  return objc_getAssociatedObject(self, "interactiveTransitionContext");
+}
+
+- (void)setInteractiveTransitionContext:(id<MDMInteractiveTransition>) interactiveTransition {
+  objc_setAssociatedObject(self, "interactiveTransitionContext", interactiveTransition, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
 - (id<MDMTransitionController>)mdm_transitionController {
   const void *key = [self mdm_transitionControllerKey];
 

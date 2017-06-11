@@ -43,17 +43,13 @@ class FadeInteractiveExampleViewController: ExampleViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    let button = UIButton(frame: CGRect(x: 30, y: 250, width: 200, height: 50))
-    button.backgroundColor = UIColor.green
-    button.setTitle("start", for: .normal)
-    button.addTarget(self, action: #selector(didTap), for: .touchUpInside)
-    view.addSubview(button)
-
+    
     let label = UILabel(frame: CGRect(x: 30, y: 310, width: 300, height: 50))
     label.textColor = UIColor.white
     label.text = "Swipe up after pressing start"
     view.addSubview(label)
+    
+    view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTap)))
   }
 
   override func exampleInformation() -> ExampleInfo {

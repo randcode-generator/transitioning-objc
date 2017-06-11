@@ -17,6 +17,7 @@
 #import <Foundation/Foundation.h>
 
 @protocol MDMTransitionController;
+@protocol MDMInteractiveTransitionContext;
 
 @interface UIViewController (MDMTransitionController)
 
@@ -31,4 +32,5 @@
 @property(nonatomic, strong, readonly, nonnull) id<MDMTransitionController> mdm_transitionController
     NS_SWIFT_NAME(transitionController);
 
+@property(nonatomic, strong, nullable) id<MDMInteractiveTransitionContext> interactiveTransitionContext;
 @end

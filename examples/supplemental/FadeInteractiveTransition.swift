@@ -34,42 +34,6 @@ final class FadeInteractiveTransition: NSObject, InteractiveTransition {
   }
   
   func start(withInteractiveContext context: InteractiveTransitionContext) {
-    self.context = context
-    
-    if (context.transitionContext.direction == .forward) {
-      let m = context.transitionContext.foreViewController as! ModalInteractiveViewController
-      m.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(didPan)))
-    } else {
-      let n = context.transitionContext.sourceViewController
-      n!.view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(didPan)))
-      prevY = 0
-      percentage = CGFloat(0.01)
-    }
-  }
-  
-  var prevY: CGFloat = 0
-  var percentage = CGFloat(0.01)
-  func didPan(_ gestureRecognizer : UIPanGestureRecognizer) {
-    let translation = gestureRecognizer.location(in: gestureRecognizer.view)
-    
-    if(context.transitionContext.direction == .forward) {
-      if prevY > translation.y {
-        percentage += 0.2
-      } else {
-        percentage -= 0.2
-      }
-    } else {
-      if prevY > translation.y {
-        percentage -= 0.2
-      } else {
-        percentage += 0.2
-      }
-    }
-    prevY = translation.y
-    context.updatePercent(percentage)
-    if percentage > 1.0 {
-      context.finishInteractiveTransition()
-      percentage = CGFloat(0.01)
-    }
+    context.transitionContext.foreViewController.interactiveTransitionContext = context
   }
 }
