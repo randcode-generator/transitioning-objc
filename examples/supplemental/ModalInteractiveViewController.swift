@@ -52,7 +52,7 @@ class ModalInteractiveViewController: ExampleViewController {
       
       interactiveTransitionContext?.updatePercent(percentage)
     case .ended:
-      if percentage > 0.5 {
+      if percentage > 0.8 {
         interactiveTransitionContext?.finishInteractiveTransition()
         print("finished")
       } else {

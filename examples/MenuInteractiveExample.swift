@@ -74,7 +74,7 @@ class MenuInteractiveExampleViewController: ExampleViewController {
       percentage = min(percentage, 0.99)
       interactiveTransitionContext?.updatePercent(percentage)
     case .ended:
-      if percentage > 0.5 {
+      if percentage > 0.8 {
         interactiveTransitionContext?.finishInteractiveTransition()
       } else {
         interactiveTransitionContext?.cancelInteractiveTransition()
@@ -108,7 +108,10 @@ private final class MenuTransition: NSObject, Transition {
           toVC.view.frame.origin.x = -1 * (toVC.view.frame.width / 2)
         },
         completion: { _ in
-          context.transitionDidEnd()
+          let deadlineTime = DispatchTime.now() + .milliseconds(10)
+          DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            context.transitionDidEnd()
+          }
         }
       )
       if let snapshot = fromVC.view.snapshotView(afterScreenUpdates: false) {
@@ -125,8 +128,12 @@ private final class MenuTransition: NSObject, Transition {
           toVC.view.frame.origin.x = -1 * toVC.view.frame.width
         },
         completion: { _ in
-          context.transitionDidEnd()
           
+          let deadlineTime = DispatchTime.now() + .milliseconds(10)
+          DispatchQueue.main.asyncAfter(deadline: deadlineTime) {
+            context.transitionDidEnd()
+          }
+
           if(context.wasCancelled == false) {
             containerView.viewWithTag(2000)?.removeFromSuperview()
             containerView.insertSubview(toVC.view, aboveSubview: fromVC.view)
