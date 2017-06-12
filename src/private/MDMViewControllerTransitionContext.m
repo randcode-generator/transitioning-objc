@@ -89,10 +89,8 @@
   }
   
   _transition = nil;
-
-  if(!wasCanceled) {
-    [_delegate transitionDidCompleteWithContext:self];
-  }
+  
+  [_delegate transitionDidCompleteWithContext:self];
 }
 
 #pragma mark - Private
