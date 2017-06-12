@@ -28,6 +28,7 @@
 @synthesize sourceViewController = _sourceViewController;
 @synthesize backViewController = _backViewController;
 @synthesize foreViewController = _foreViewController;
+@synthesize wasCancelled = _wasCancelled;
 
 - (nonnull instancetype)initWithTransition:(nonnull id<MDMTransition>)transition
                                  direction:(MDMTransitionDirection)direction
@@ -80,8 +81,10 @@
 - (void)transitionDidEnd {
   BOOL wasCanceled = [_transitionContext transitionWasCancelled];
   if(wasCanceled) {
+    _wasCancelled = false;
     [_transitionContext completeTransition: false];
   } else {
+    _wasCancelled = true;
     [_transitionContext completeTransition: true];
   }
   

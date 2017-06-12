@@ -43,6 +43,8 @@ NS_SWIFT_NAME(TransitionContext)
  */
 - (void)transitionDidEnd;
 
+@property(nonatomic, readonly) BOOL wasCancelled;
+
 /**
  The direction this transition is moving in.
  */
