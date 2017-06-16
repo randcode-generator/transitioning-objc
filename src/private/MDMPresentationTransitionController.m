@@ -17,7 +17,6 @@
 #import "MDMPresentationTransitionController.h"
 
 #import "MDMTransition.h"
-#import "MDMViewControllerInteractiveTransitionContext.h"
 #import "MDMViewControllerTransitionContext.h"
 
 @interface MDMPresentationTransitionController () <UIViewControllerTransitioningDelegate, MDMViewControllerTransitionContextDelegate>
@@ -31,7 +30,6 @@
   UIPresentationController *_presentationController;
 
   MDMViewControllerTransitionContext *_context;
-  MDMViewControllerInteractiveTransitionContext *_interactiveContext;
   __weak UIViewController *_source;
 }
 
@@ -162,13 +160,13 @@
     if(isInteractiveResponds && startWithInteractiveResponds) {
       isInteractive = [_interactiveTransition isInteractive:_context];
       if(isInteractive) {
-        _interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context];
+        //_interactiveContext = [[MDMViewControllerInteractiveTransitionContext alloc] initWithTransition:_context];
         
-        [_interactiveTransition startWithInteractiveContext:_interactiveContext];
+        [_interactiveTransition startWithInteractiveContext:_context];
       }
     }
   }
   
-  return isInteractive == false ? nil : [_interactiveContext getPercentIT];
+  return isInteractive == false ? nil : [_context getPercentIT];
 }
 @end

@@ -22,6 +22,8 @@
   id<MDMTransition> _transition;
   id<UIViewControllerContextTransitioning> _transitionContext;
   UIPresentationController *_presentationController;
+  
+  UIPercentDrivenInteractiveTransition *_percent;
 }
 
 @synthesize direction = _direction;
@@ -44,6 +46,8 @@
     _backViewController = backViewController;
     _foreViewController = foreViewController;
     _presentationController = presentationController;
+    
+    _percent = [[UIPercentDrivenInteractiveTransition alloc] init];
   }
   return self;
 }
@@ -159,4 +163,19 @@
       }];
 }
 
+- (UIPercentDrivenInteractiveTransition *_Nonnull)getPercentIT {
+  return _percent;
+}
+
+- (void)updatePercent:(CGFloat)percent {
+  [_percent updateInteractiveTransition:percent];
+}
+
+- (void)finishInteractiveTransition {
+  [_percent finishInteractiveTransition];
+}
+
+- (void)cancelInteractiveTransition {
+  [_percent cancelInteractiveTransition];
+}
 @end

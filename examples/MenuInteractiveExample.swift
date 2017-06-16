@@ -150,7 +150,7 @@ final class MenuInteractiveTransition: NSObject, InteractiveTransition {
   }
   
   func start(withInteractiveContext context: InteractiveTransitionContext) {
-    context.transitionContext.sourceViewController!.interactiveTransitionContext = context
-    context.transitionContext.foreViewController.interactiveTransitionContext = context
+    context.sourceViewController!.interactiveTransitionContext = context
+    context.foreViewController.interactiveTransitionContext = context
   }
 }
