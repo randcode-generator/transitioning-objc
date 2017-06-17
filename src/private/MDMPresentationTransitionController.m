@@ -34,7 +34,7 @@
 }
 
 @synthesize transition = _transition;
-@synthesize interactiveTransition = _interactiveTransition;
+//@synthesize interactiveTransition = _interactiveTransition;
 
 - (nonnull instancetype)initWithViewController:(nonnull UIViewController *)viewController {
   self = [super init];
@@ -61,9 +61,9 @@
   return _context.transition;
 }
 
-- (void)setInteractiveTransition:(id<MDMInteractiveTransition>)transition {
-  _interactiveTransition = transition;
-}
+//- (void)setInteractiveTransition:(id<MDMInteractiveTransition>)transition {
+//  _interactiveTransition = transition;
+//}
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
@@ -145,27 +145,26 @@
 - (nullable id<UIViewControllerInteractiveTransitioning>)prepareForInteractiveTransition {
   Boolean isInteractive = false;
 
-  if (_interactiveTransition) {
-    Boolean isInteractiveResponds = false;
-    Boolean startWithInteractiveResponds = false;
+  Boolean isInteractiveResponds = false;
+  Boolean startWithInteractiveResponds = false;
 
-    if ([_interactiveTransition respondsToSelector:@selector(isInteractive:)]) {
-      isInteractiveResponds = true;
-    } else {
-      return nil;
-    }
+  if ([_transition respondsToSelector:@selector(isInteractive:)]) {
+    isInteractiveResponds = true;
+  } else {
+    return nil;
+  }
 
-    if ([_interactiveTransition respondsToSelector:@selector(startWithInteractiveContext:)]) {
-      startWithInteractiveResponds = true;
-    } else {
-      return nil;
-    }
+  if ([_transition respondsToSelector:@selector(startWithInteractiveContext:)]) {
+    startWithInteractiveResponds = true;
+  } else {
+    return nil;
+  }
 
-    if (isInteractiveResponds && startWithInteractiveResponds) {
-      isInteractive = [_interactiveTransition isInteractive:_context];
-      if (isInteractive) {
-        [_interactiveTransition startWithInteractiveContext:_context];
-      }
+  if (isInteractiveResponds && startWithInteractiveResponds) {
+    id<MDMInteractiveTransition> interactiveTransition = (id<MDMInteractiveTransition>)_transition;
+    isInteractive = [interactiveTransition isInteractive:_context];
+    if (isInteractive) {
+      [interactiveTransition startWithInteractiveContext:_context];
     }
   }
 

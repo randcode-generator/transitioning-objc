@@ -45,6 +45,4 @@ NS_SWIFT_NAME(TransitionController)
  This may be non-nil while a transition is active.
  */
 @property(nonatomic, strong, nullable, readonly) id<MDMTransition> activeTransition;
-
-@property(nonatomic, strong, nullable) id<MDMInteractiveTransition> interactiveTransition;
 @end

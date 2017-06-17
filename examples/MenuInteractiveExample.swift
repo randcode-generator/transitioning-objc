@@ -31,7 +31,6 @@ class MenuInteractiveExampleViewController: ExampleViewController {
     // dictate how the view controller is presented. For this example we've built a custom
     // FadeTransition, so we'll make use of that now:
     modalViewController.transitionController.transition = MenuTransition()
-    modalViewController.transitionController.interactiveTransition = MenuInteractiveTransition()
 
     // Note that once we assign the transition object to the view controller, the transition will
     // govern all subsequent presentations and dismissals of that view controller instance. If we
@@ -88,7 +87,7 @@ class MenuInteractiveExampleViewController: ExampleViewController {
 }
 
 // Transitions must be NSObject types that conform to the Transition protocol.
-private final class MenuTransition: NSObject, Transition {
+private final class MenuTransition: NSObject, Transition, InteractiveTransition {
 
   // The sole method we're expected to implement, start is invoked each time the view controller is
   // presented or dismissed.
@@ -142,9 +141,7 @@ private final class MenuTransition: NSObject, Transition {
       )
     }
   }
-}
 
-final class MenuInteractiveTransition: NSObject, InteractiveTransition {
   func isInteractive(_ context: TransitionContext) -> Bool {
     return true
   }
