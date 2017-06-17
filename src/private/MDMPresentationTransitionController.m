@@ -34,6 +34,7 @@
 }
 
 @synthesize transition = _transition;
+@synthesize interactiveTransition = _interactiveTransition;
 
 - (nonnull instancetype)initWithViewController:(nonnull UIViewController *)viewController {
   self = [super init];
@@ -60,6 +61,10 @@
   return _context.transition;
 }
 
+- (void)setInteractiveTransition:(id<MDMInteractiveTransition>)transition {
+  _interactiveTransition = transition;
+}
+
 #pragma mark - UIViewControllerTransitioningDelegate
 
 // Animated transitions
@@ -82,6 +87,14 @@
                                   foreViewController:dismissed
                                            direction:MDMTransitionDirectionBackward];
   return _context;
+}
+
+- (nullable id<UIViewControllerInteractiveTransitioning>)interactionControllerForPresentation:(id<UIViewControllerAnimatedTransitioning>)animator {
+  return [self prepareForInteractiveTransition];
+}
+
+- (nullable id<UIViewControllerInteractiveTransitioning>)interactionControllerForDismissal:(id<UIViewControllerAnimatedTransitioning>)animator {
+  return [self prepareForInteractiveTransition];
 }
 
 // Presentation
@@ -129,4 +142,33 @@
   }
 }
 
+- (nullable id<UIViewControllerInteractiveTransitioning>)prepareForInteractiveTransition {
+  Boolean isInteractive = false;
+
+  if (_interactiveTransition) {
+    Boolean isInteractiveResponds = false;
+    Boolean startWithInteractiveResponds = false;
+
+    if ([_interactiveTransition respondsToSelector:@selector(isInteractive:)]) {
+      isInteractiveResponds = true;
+    } else {
+      return nil;
+    }
+
+    if ([_interactiveTransition respondsToSelector:@selector(startWithInteractiveContext:)]) {
+      startWithInteractiveResponds = true;
+    } else {
+      return nil;
+    }
+
+    if (isInteractiveResponds && startWithInteractiveResponds) {
+      isInteractive = [_interactiveTransition isInteractive:_context];
+      if (isInteractive) {
+        [_interactiveTransition startWithInteractiveContext:_context];
+      }
+    }
+  }
+
+  return isInteractive == false ? nil : [_context getPercentIT];
+}
 @end
