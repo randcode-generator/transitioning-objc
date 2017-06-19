@@ -17,10 +17,51 @@
 import UIKit
 import Transitioning
 
+class MenuGestureViewController: ExampleViewController {
+  var call: (() -> Void)! = nil
+  
+  public func setCall(call: @escaping ()->Void) {
+    self.call = call
+  }
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    let tap = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(edgePanGesture))
+    tap.edges = .left
+    view.addGestureRecognizer(tap)
+    
+    navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+  }
+  
+  var percentage = CGFloat(0.01)
+  func edgePanGesture(_ sender: UIScreenEdgePanGestureRecognizer) {
+    let translation = sender.location(in: sender.view?.superview)
+    switch sender.state {
+    case .began:
+      call()
+    case .changed:
+      percentage = translation.x / ((sender.view!.frame.width)/2)
+      percentage = min(percentage, 0.99)
+      interactiveTransitionContext?.updatePercent(percentage)
+    case .ended:
+      if percentage > 0.8 {
+        interactiveTransitionContext?.finishInteractiveTransition()
+      } else {
+        interactiveTransitionContext?.cancelInteractiveTransition()
+      }
+      interactiveTransitionContext = nil
+      percentage = CGFloat(0.01)
+    default:
+      break
+    }
+  }
+}
+
 // This example demonstrates the minimal path to building a custom transition using the Material
 // Motion Transitioning APIs in Swift. The essential steps have been documented below.
 
-class MenuInteractiveExampleViewController: ExampleViewController {
+class MenuInteractiveExampleViewController: MenuGestureViewController {
 
   func didTap() {
     let modalViewController = ModalInteractiveViewController()
@@ -49,40 +90,13 @@ class MenuInteractiveExampleViewController: ExampleViewController {
     label.textAlignment = .center
     label.text = "Swipe from left edge to start the transition"
     view.addSubview(label)
-
-    let tap = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(edgePanGesture))
-    tap.edges = .left
-    view.addGestureRecognizer(tap)
-
-    navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    
+    setCall(call: didTap)
   }
 
   override func exampleInformation() -> ExampleInfo {
     return .init(title: type(of: self).catalogBreadcrumbs().last!,
                  instructions: "Tap to present a modal transition.")
-  }
-
-  var percentage = CGFloat(0.01)
-  func edgePanGesture(_ sender: UIScreenEdgePanGestureRecognizer) {
-    let translation = sender.location(in: sender.view?.superview)
-    switch sender.state {
-    case .began:
-      didTap()
-    case .changed:
-      percentage = translation.x / ((sender.view!.frame.width)/2)
-      percentage = min(percentage, 0.99)
-      interactiveTransitionContext?.updatePercent(percentage)
-    case .ended:
-      if percentage > 0.8 {
-        interactiveTransitionContext?.finishInteractiveTransition()
-      } else {
-        interactiveTransitionContext?.cancelInteractiveTransition()
-      }
-      interactiveTransitionContext = nil
-      percentage = CGFloat(0.01)
-    default:
-      break
-    }
   }
 }
 
