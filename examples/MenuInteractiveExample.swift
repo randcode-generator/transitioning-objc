@@ -19,21 +19,21 @@ import Transitioning
 
 class MenuGestureViewController: ExampleViewController {
   var call: (() -> Void)! = nil
-  
+
   public func setCall(call: @escaping ()->Void) {
     self.call = call
   }
-  
+
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     let tap = UIScreenEdgePanGestureRecognizer(target: self, action: #selector(edgePanGesture))
     tap.edges = .left
     view.addGestureRecognizer(tap)
-    
+
     navigationController?.interactivePopGestureRecognizer?.isEnabled = false
   }
-  
+
   var percentage = CGFloat(0.01)
   func edgePanGesture(_ sender: UIScreenEdgePanGestureRecognizer) {
     let translation = sender.location(in: sender.view?.superview)
@@ -90,7 +90,7 @@ class MenuInteractiveExampleViewController: MenuGestureViewController {
     label.textAlignment = .center
     label.text = "Swipe from left edge to start the transition"
     view.addSubview(label)
-    
+
     setCall(call: didTap)
   }
 

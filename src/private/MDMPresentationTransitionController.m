@@ -168,7 +168,7 @@
     }
   }
 
-  UIPercentDrivenInteractiveTransition* pdi = [_context getPercentIT];
+  UIPercentDrivenInteractiveTransition *pdi = [_context getPercentIT];
   // Setting the completion speed to a value close to 1.0 prevents
   // the bar from sometimes jumping.
   pdi.completionSpeed = 0.933;

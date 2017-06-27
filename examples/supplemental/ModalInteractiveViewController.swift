@@ -22,7 +22,7 @@ class ModalGestureViewController: ExampleViewController {
     super.viewDidLoad()
     view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(handleGesture)))
   }
-  
+
   var percentage = CGFloat(0.01)
   func handleGesture(_ sender: UIPanGestureRecognizer) {
     let translation = sender.location(in: sender.view?.superview)
@@ -34,7 +34,7 @@ class ModalGestureViewController: ExampleViewController {
       print(percentage)
       percentage = min(percentage, 0.99)
       print(translation.x)
-      
+
       interactiveTransitionContext?.updatePercent(percentage)
     case .ended:
       if percentage > 0.8 {
